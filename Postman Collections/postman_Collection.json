@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "0d889677-ea2a-415f-a34d-edb504eaaee2",
+		"name": "Lesson6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Pet Controller",
+			"item": [
+				{
+					"name": "POST /pet (change body data)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "32a16622-04b5-4c40-ab5a-cb467377a3c2",
+								"exec": [
+									"//Solution2\r",
+									"// Getting response as text and adding colons\r",
+									"let responseSolution2 = pm.response.text().replace(/([^\"\\w-])([-0-9.]{8,100})([^\"\\w-])/g, '$1\"$2\"$3');\r",
+									"\r",
+									"// Parse response as a String because we have added colons\r",
+									"let jsonData = JSON.parse(responseSolution2);\r",
+									"\r",
+									"// Deleting colons\r",
+									"let idSolution2 = jsonData.id.replace('\"','');\r",
+									"\r",
+									"// Write value to a variable of your choice\r",
+									"console.log(\"id is \"+idSolution2);\r",
+									"pm.environment.set(\"idSolution2\", idSolution2);\r",
+									"\r",
+									"//Solution1\r",
+									"// Get response as text\r",
+									"let responseSolution1 = pm.response.text();\r",
+									"console.log(responseSolution1);\r",
+									"\r",
+									"// Write a Regular expression that will return a group of numbers\r",
+									"let docRegex = new RegExp(/\\d+/, 'i');\r",
+									"\r",
+									"// Matcher will return a group that will be and Order Id for example\r",
+									"let idSolution1 = responseSolution1.match(docRegex);\r",
+									"\r",
+									"// Write value to a variable of your choice\r",
+									"console.log(idSolution1);\r",
+									"pm.environment.set(\"idSolution1\", idSolution1);\r",
+									"\r",
+									"//Wait for new endPoints"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5c136cad-680d-49dc-b594-02fce49b9c25",
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "5d3f0f8a-40bc-4cd0-811e-119ac1fb308c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"L.L pet\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/pet"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /pet/{petId}_Solution2",
+					"id": "fc053cc4-71a7-46ff-b31c-cab9a72c5c4d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/pet/{{globalPetId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /pet/{petId}_Solution1",
+					"id": "4b5e6a63-1792-4bff-b287-e4aedb4b2f8a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/pet/{{petId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /pet/findByStatus",
+					"id": "df1944c4-b3c0-4d85-845f-473fe5c80d6e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/findByStatus?status=pending",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "12ff63a0-ea4e-44b4-bb23-81c62e921588"
+		},
+		{
+			"name": "petAllRequestsForLesson1",
+			"item": [
+				{
+					"name": "POST /pet/{petId}/uploadImage",
+					"id": "972eed17-6274-4f40-994a-b1a25ef602ad",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"type": "text",
+									"key": "additionalMetadata",
+									"value": "dogImage"
+								},
+								{
+									"type": "file",
+									"contentType": "image/png",
+									"key": "file",
+									"src": "postman-cloud:///1ef01aac-f34b-4220-9901-678a87c3296e"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/v2/pet/1/uploadImage"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /pet (change body data)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "32a16622-04b5-4c40-ab5a-cb467377a3c2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "34bc383b-b260-4068-96fe-b60aaee90bbe",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"L.L pet\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/pet"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /pet (change something by your pet id)",
+					"id": "e5d457c1-02ea-4525-a664-8e7856cd9e10",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"doggie\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/pet"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /pet/{petId}",
+					"id": "477c57b8-166f-4407-81e6-16eddb6849ae",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/pet/{{petId}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GET /pet/findByStatus",
+					"id": "1a5265d9-3bab-41fb-87c9-839a0b36bfe5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/pet/findByStatus?status=available",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "available"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /pet/{petId}",
+					"id": "44ec8292-d685-4c24-ace9-0ee932770e89",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/pet/1"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /pet/{petId}",
+					"id": "5888d58f-746c-4fe6-8194-1e526545a65a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "dog1203",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "sold",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/pet/22"
+					},
+					"response": []
+				}
+			],
+			"id": "1c496ab8-be0b-4008-a88f-e9407f916e7e"
+		}
+	]
+}
